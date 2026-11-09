@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=virtusb
+Comment=Attach and detach host USB devices to libvirt VMs
+Exec=virtusb
+Icon=net.toshimichi.virtusb
+Terminal=false
+Categories=System;Emulator;
