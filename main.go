@@ -157,11 +157,18 @@ func main() {
 	}
 
 	vmSel := widget.NewSelect(listVMs(), func(s string) { vm = s; refresh() })
+	// Preselect the VM when exactly one is running and none is chosen yet.
+	autoPick := func() {
+		if out, _ := virsh("list", "--name"); vm == "" && len(strings.Fields(out)) == 1 {
+			vmSel.SetSelected(strings.Fields(out)[0])
+		}
+	}
 	top := container.NewBorder(nil, nil, widget.NewLabel("VM:"),
-		widget.NewButton("Refresh", func() { vmSel.Options = listVMs(); refresh() }), vmSel)
+		widget.NewButton("Refresh", func() { vmSel.Options = listVMs(); autoPick(); refresh() }), vmSel)
 
 	w.SetContent(container.NewBorder(top, nil, nil, nil, list))
 	w.Resize(fyne.NewSize(600, 400))
 	refresh()
+	autoPick()
 	w.ShowAndRun()
 }
