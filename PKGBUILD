@@ -11,8 +11,8 @@ depends=('libvirt' 'glibc' 'libglvnd' 'wayland' 'libxkbcommon'
          'libx11' 'libxcursor' 'libxext' 'libxi' 'libxinerama' 'libxrandr' 'libxrender')
 optdepends=('libdecor: client-side window decorations on Wayland (e.g. GNOME)')
 makedepends=('go')
-source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
-sha256sums=('SKIP')
+source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
+sha256sums=('6bd082d39102c3329bca3172739c74c2436c48558e83667fa49ff42962901dea')
 
 build() {
   cd "$pkgname-$pkgver"
