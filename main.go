@@ -2,6 +2,7 @@
 package main
 
 import (
+	_ "embed"
 	"encoding/xml"
 	"fmt"
 	"image/color"
@@ -17,6 +18,9 @@ import (
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
+
+//go:embed icon.svg
+var iconSVG []byte
 
 var uri = envOr("LIBVIRT_DEFAULT_URI", "qemu:///system")
 
@@ -117,6 +121,7 @@ func (t whiteOnError) Color(n fyne.ThemeColorName, v fyne.ThemeVariant) color.Co
 
 func main() {
 	a := app.NewWithID("net.toshimichi.virtusb")
+	a.SetIcon(fyne.NewStaticResource("icon.svg", iconSVG))
 	a.Settings().SetTheme(whiteOnError{theme.DefaultTheme()})
 	w := a.NewWindow("virtusb")
 
