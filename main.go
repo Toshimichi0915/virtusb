@@ -4,6 +4,7 @@ package main
 import (
 	"encoding/xml"
 	"fmt"
+	"image/color"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -13,6 +14,7 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -103,8 +105,19 @@ func toggle(cmd, vm string, d usbDev) error {
 	return err
 }
 
+// whiteOnError makes text on red (danger) buttons white in both light and dark variants.
+type whiteOnError struct{ fyne.Theme }
+
+func (t whiteOnError) Color(n fyne.ThemeColorName, v fyne.ThemeVariant) color.Color {
+	if n == theme.ColorNameForegroundOnError {
+		return color.White
+	}
+	return t.Theme.Color(n, v)
+}
+
 func main() {
 	a := app.New()
+	a.Settings().SetTheme(whiteOnError{theme.DefaultTheme()})
 	w := a.NewWindow("virtusb")
 
 	var devs []usbDev
@@ -122,10 +135,12 @@ func main() {
 			c := o.(*fyne.Container)
 			c.Objects[0].(*widget.Label).SetText(fmt.Sprintf("%s  %s", d.id(), d.Name))
 			btn := c.Objects[1].(*widget.Button)
-			cmd, label := "attach-device", "Attach"
+			// Attach = blue (primary), Detach = red (danger).
+			cmd, label, imp := "attach-device", "Attach", widget.HighImportance
 			if attached[d.id()] {
-				cmd, label = "detach-device", "Detach"
+				cmd, label, imp = "detach-device", "Detach", widget.DangerImportance
 			}
+			btn.Importance = imp
 			btn.SetText(label)
 			btn.OnTapped = func() {
 				if vm == "" {
