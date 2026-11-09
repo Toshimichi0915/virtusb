@@ -116,7 +116,7 @@ func (t whiteOnError) Color(n fyne.ThemeColorName, v fyne.ThemeVariant) color.Co
 }
 
 func main() {
-	a := app.New()
+	a := app.NewWithID("net.toshimichi.virtusb")
 	a.Settings().SetTheme(whiteOnError{theme.DefaultTheme()})
 	w := a.NewWindow("virtusb")
 
